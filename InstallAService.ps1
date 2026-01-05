@@ -11,16 +11,19 @@ param(
     [string]$StartupType = "Automatic"
 )
 
+# Build proper quoted binPath
+$binPath = "`"$ExecutablePath`""
+
 # Check if service exists
 $existing = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if ($existing) {
     Write-Host "Service '$ServiceName' already exists. Updating executable path..."
-    sc.exe config $ServiceName binPath= "\"$ExecutablePath\"" | Out-Null
+    sc.exe config $ServiceName binPath= $binPath | Out-Null
 }
 else {
     Write-Host "Creating service '$ServiceName'..."
     New-Service -Name $ServiceName `
-        -BinaryPathName $ExecutablePath `
+        -BinaryPathName $binPath `
         -DisplayName $DisplayName `
         -StartupType $StartupType
 }
