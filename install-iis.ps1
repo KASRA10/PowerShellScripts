@@ -1,7 +1,7 @@
 # install-iis.ps1
 Write-Host "🔧 Installing IIS on Windows 10/11..." -ForegroundColor Cyan
 
-# لیست ویژگی‌های مورد نیاز
+# List Of Needed Features
 $features = @(
     "IIS-WebServerRole",
     "IIS-WebServer",

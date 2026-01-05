@@ -1,25 +1,25 @@
-# PowerShell با Administrator
+# PowerShell as Administrator
 
-# 1. ایجاد Application Pool
-New-WebAppPool -Name "VoIPSignalRHub-Test"
+# 1. Create Application Pool
+New-WebAppPool -Name "SampleAppPool"
 
-# 2. تنظیمات Application Pool
-Set-ItemProperty "IIS:\AppPools\VoIPSignalRHub-Test" `
-                 -Name "managedRuntimeVersion" -Value "v4.0"
-Set-ItemProperty "IIS:\AppPools\VoIPSignalRHub-Test" `
-                 -Name "processModel.idleTimeout" -Value "00:00:00"
+# 2. Configure Application Pool
+Set-ItemProperty "IIS:\AppPools\SampleAppPool" `
+    -Name "managedRuntimeVersion" -Value "v4.0"
+Set-ItemProperty "IIS:\AppPools\SampleAppPool" `
+    -Name "processModel.idleTimeout" -Value "00:00:00"
 
-# 3. ایجاد Application در Default Web Site
-#    توجه: مسیر باید دقیقاً مطابق پوشه Publish تو باشد
-$publishPath = "D:\Kasra10\Codes\CSharp-APPs\SAYA\VoIP Module\TestBasics\VoIPTestUnitApp\VoIPSignalRHub\bin\app.publish"
+# 3. Create Application in Default Web Site
+#    Note: The path must exactly match your Publish folder
+$publishPath = "D:\Projects\SampleApp\PublishOutput"
 
 New-WebApplication -Site "Default Web Site" `
-                   -Name "VoIPSignalRHub" `
-                   -PhysicalPath $publishPath `
-                   -ApplicationPool "VoIPSignalRHub-Test"
+    -Name "SampleWebApp" `
+    -PhysicalPath $publishPath `
+    -ApplicationPool "SampleAppPool"
 
-# 4. تنظیم Permission برای مسیر واقعی تو
-icacls $publishPath /grant "IIS AppPool\VoIPSignalRHub-Test":(OI)(CI)(RX)
+# 4. Set permissions for your actual path
+icacls $publishPath /grant "IIS AppPool\SampleAppPool":(OI)(CI)(RX)
 
-# 5. همچنین برای IIS_IUSRS هم Permission بده (برای اطمینان)
+# 5. Also grant permissions to IIS_IUSRS (for safety)
 icacls $publishPath /grant "IIS_IUSRS":(OI)(CI)(RX)
