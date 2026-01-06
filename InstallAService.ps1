@@ -26,16 +26,16 @@ $existing = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if ($existing) {
     Write-Host "Service '$ServiceName' already exists. Stopping and updating..." -ForegroundColor Yellow
     Stop-Service -Name $ServiceName -Force -ErrorAction SilentlyContinue
-    
+
     sc.exe config $ServiceName binPath= $binPath | Out-Null
-    
+
     if ($Description) {
         sc.exe description $ServiceName $Description | Out-Null
     }
 }
 else {
     Write-Host "Creating new service '$ServiceName'..." -ForegroundColor Green
-    
+
     if ($Description) {
         New-Service -Name $ServiceName `
             -BinaryPathName $binPath `
